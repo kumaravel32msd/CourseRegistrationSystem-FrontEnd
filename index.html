@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CourseRegistrationSystem</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- particles.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    :root {
+      --bg-light: linear-gradient(270deg, #e0e0e0, #f8f8f8, #e0e0e0);
+      --bg-dark: linear-gradient(270deg, #2d2d2d, #1e1e1e, #2d2d2d);
+      --text-light: #333;
+      --text-dark: #f5f5f5;
+      --glow-color: #00c6ff;
+    }
+
+    /* Loading Spinner + Percentage */
+    #loader-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1000;
+      color: white;
+      font-size: 20px;
+    }
+
+    #loader {
+      width: 60px;
+      height: 60px;
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #00c6ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      text-align: center;
+      background: var(--bg-light);
+      background-size: 600% 600%;
+      animation: gradientBG 15s ease infinite;
+      color: var(--text-light);
+      transition: background 0.5s ease, color 0.5s ease;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Navbar */
+    nav {
+      background: rgba(0,0,0,0.7);
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav a {
+      color: white;
+      font-size: 22px;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    nav a:hover {
+      color: #00c6ff;
+      text-shadow: 0 0 10px #00c6ff, 0 0 20px #00c6ff;
+    }
+
+    /* Typewriter */
+    h2 {
+      margin-top: 40px;
+      font-size: 28px;
+      border-right: 2px solid;
+      white-space: nowrap;
+      overflow: hidden;
+      width: fit-content;
+      margin-inline: auto;
+      min-height: 40px;
+      animation: flicker 2s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity:1; }
+      20%, 24%, 55% { opacity:0.4; }
+    }
+
+    /* Buttons with glow and ripple */
+    button {
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 15px 25px;
+      font-size: 16px;
+      margin: 15px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow 0.3s, transform 0.2s;
+      box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+    }
+
+    button:hover {
+      box-shadow: 0 0 20px var(--glow-color), 0 0 40px var(--glow-color);
+      transform: scale(1.05);
+    }
+
+    button::after {
+      content: "";
+      position: absolute;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      transform: scale(0);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    button:active::after {
+      width: 200px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      margin-left: -100px;
+      margin-top: -100px;
+      transform: scale(1);
+      opacity: 1;
+      transition: transform 0.5s, opacity 1s;
+    }
+
+    /* Dark mode */
+    .dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .dark-mode button {
+      background: #222;
+    }
+
+    /* Theme toggle */
+    #themeToggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+      z-index: 20;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loader -->
+  <div id="loader-container">
+    <div id="loader"></div>
+    <div id="loading-percentage">Loading... 0%</div>
+  </div>
+
+  <!-- Theme Toggle -->
+  <button id="themeToggle"><i class="fas fa-moon"></i></button>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html"><i class="fas fa-home"></i></a>
+    <a href="availablecourse.html"><i class="fas fa-book"></i></a>
+    <a href="enrolledstudents.html"><i class="fas fa-users"></i></a>
+    
+  </nav>
+
+  <!-- Typewriter -->
+  <h2 id="typewriter"></h2>
+
+  <!-- Buttons -->
+  <a href="Register.html"><button><i class="fas fa-plus-circle"></i> Register Course</button></a>
+  <a href="Availablecourse.html"><button><i class="fas fa-book"></i> Available Course</button></a>
+  <a href="EnrolledStudents.html"><button><i class="fas fa-users"></i> Enrolled Students</button></a>
+
+  <!-- particles.js container -->
+  <div id="particles-js"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    // particles.js init
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 60 },
+        "color": { "value": "#00c6ff" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5 },
+        "size": { "value": 3 },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#00c6ff",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": { "enable": true, "speed": 2 }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "grab" },
+          "onclick": { "enable": true, "mode": "push" }
+        },
+        "modes": {
+          "grab": { "distance": 200, "line_linked": { "opacity": 0.7 } },
+          "push": { "particles_nb": 4 }
+        }
+      },
+      "retina_detect": true
+    });
+
+    // Loader with percentage
+    let percent = 0;
+    const loadingText = document.getElementById("loading-percentage");
+    const loaderContainer = document.getElementById("loader-container");
+
+    const interval = setInterval(() => {
+      percent++;
+      loadingText.textContent = `Loading... ${percent}%`;
+      if (percent >= 100) {
+        clearInterval(interval);
+        loaderContainer.style.display = "none";
+      }
+    }, 20); // 20ms * 100 = 2s
+
+    // Theme Toggle
+    const toggleBtn = document.getElementById("themeToggle");
+    const icon = toggleBtn.querySelector("i");
+
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-mode");
+      icon.classList.replace("fa-moon", "fa-sun");
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      icon.classList.toggle("fa-moon", !isDark);
+      icon.classList.toggle("fa-sun", isDark);
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+
+    // Typewriter
+    const messages = ["Course Registration Page", "Join Today", "Get Started Now!", "Register in Seconds"];
+    const el = document.getElementById("typewriter");
+    let msgIndex = 0, charIndex = 0, typing = true;
+
+    function typeWriter() {
+      if (typing) {
+        if (charIndex < messages[msgIndex].length) {
+          el.textContent += messages[msgIndex][charIndex++];
+          setTimeout(typeWriter, 80);
+        } else {
+          typing = false;
+          setTimeout(typeWriter, 1500);
+        }
+      } else {
+        if (charIndex > 0) {
+          el.textContent = messages[msgIndex].substring(0, --charIndex);
+          setTimeout(typeWriter, 40);
+        } else {
+          typing = true;
+          msgIndex = (msgIndex + 1) % messages.length;
+          setTimeout(typeWriter, 200);
+        }
+      }
+    }
+
+    typeWriter();
+  </script>
+</body>
+</html>

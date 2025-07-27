@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript" src="myscript.js"></script>
+
+  <style>
+    /* Fullscreen Canvas for Interactive Background */
+    #bgCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background: black; /* Black background */
+    }
+
+    /* Loader Spinner */
+    #loader {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 8px solid #444;
+      border-top: 8px solid #00bcd4;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      z-index: 9999;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Page + Table Styles */
+    body {
+      padding: 50px 20px;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: white;
+      animation: fadeInBody 1s ease;
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    table {
+      width: 90%;
+      max-width: 800px;
+      margin: auto;
+      border-collapse: collapse;
+      background: rgba(30, 30, 30, 0.95); /* dark table background */
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      overflow: hidden;
+      animation: slideInTable 1s ease, floatTable 4s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes slideInTable {
+      0% { transform: translateY(40px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes floatTable {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    th {
+      background: #00bcd4;
+      color: white;
+      padding: 15px;
+      font-size: 17px;
+      border-bottom: 2px solid #0097a7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 14px;
+      font-size: 15px;
+      background-color: #222;
+      color: #eee;
+      border-bottom: 1px solid #444;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    tr:hover td {
+      background-color: #333;
+      box-shadow: inset 0 0 10px rgba(0, 188, 212, 0.2);
+    }
+
+    #enrolledtable tr {
+      animation: fadeInRow 0.5s ease forwards;
+    }
+
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      th, td {
+        padding: 10px;
+        font-size: 13px;
+      }
+      table {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Interactive Background -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Loader -->
+  <div id="loader"></div>
+
+  <table align="center" border="1">
+    <tr align="center">
+      <th width="100">Name</th>
+      <th width="200">Email Id</th>
+      <th width="150">Course Name</th>
+    </tr>
+    <tbody align="center" id="enrolledtable"></tbody>
+  </table>
+
+  <!-- JS: Page Load -->
+  <script>
+    window.onload = function () {
+      showEnrolledStudents();
+
+      // Hide loader after data loads
+      setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+      }, 800);
+    };
+  </script>
+
+  <!-- JS: Clean Subtle Interactive Particles -->
+  <script>
+    const canvas = document.getElementById("bgCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let width, height;
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    const particles = [];
+    const numParticles = 60;
+
+    for (let i = 0; i < numParticles; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5) * 0.5,
+        dy: (Math.random() - 0.5) * 0.5
+      });
+    }
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.fillStyle = "white";
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x < 0 || p.x > width) p.dx *= -1;
+        if (p.y < 0 || p.y > height) p.dy *= -1;
+      });
+
+      requestAnimationFrame(drawParticles);
+    }
+
+    drawParticles();
+  </script>
+</body>
+</html>
